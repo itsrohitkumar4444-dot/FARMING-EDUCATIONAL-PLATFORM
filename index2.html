@@ -3,24 +3,748 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gamified Sustainable Farming Educatioal Platform</title>
+<title>GreenFarm - Gamified Sustainable Farming Education Platform</title>
 <link rel="stylesheet" href="style.css">
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#e3efe7;
+    overflow-x: hidden;
+}
+
+/* ---------- NAVBAR ---------- */
+.navbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 80px;
+    background:#fff;
+    position:fixed;
+    width:100%;
+    top:0;
+    z-index:1000;
+    box-shadow:0 2px 10px rgba(0,0,0,0.05);
+    transition:0.3s;
+}
+
+.navbar.scrolled{
+    padding:15px 80px;
+    box-shadow:0 4px 20px rgba(0,0,0,0.1);
+}
+
+.logo{
+    font-weight:bold;
+    font-size:26px;
+    color:#1f3d2b;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.nav-links{
+    display:flex;
+    gap:35px;
+    align-items:center;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:#000000;
+    font-weight:500;
+    font-size:15px;
+    transition:0.3s;
+    position:relative;
+}
+
+.nav-links a:not(.join-btn):hover{
+    color:#2f8f57;
+}
+
+.nav-links a:not(.join-btn)::after{
+    content:'';
+    position:absolute;
+    bottom:-5px;
+    left:0;
+    width:0;
+    height:2px;
+    background:#2f8f57;
+    transition:0.3s;
+}
+
+.nav-links a:not(.join-btn):hover::after{
+    width:100%;
+}
+
+.join-btn{
+    background:#2f8f57;
+    color:white;
+    padding:12px 24px;
+    border-radius:25px;
+    font-weight:600;
+    transition:0.3s;
+    border:2px solid #2f8f57;
+}
+
+.join-btn:hover{
+    background:#1f6b42;
+    border-color:#1f6b42;
+    transform:translateY(-2px);
+    box-shadow:0 5px 15px rgba(47,143,87,0.3);
+}
+
+.join-btn.outline{
+    background:transparent;
+    color:#2f8f57;
+    border:2px solid #2f8f57;
+}
+
+.join-btn.outline:hover{
+    background:#2f8f57;
+    color:white;
+}
+
+/* ---------- HERO ---------- */
+.hero{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:140px 80px 80px;
+    gap:60px;
+    background:linear-gradient(135deg, #e3efe7 0%, #d9e7df 100%);
+}
+
+.hero-left{
+    max-width:580px;
+    animation:fadeInLeft 1s ease;
+}
+
+@keyframes fadeInLeft{
+    from{opacity:0; transform:translateX(-30px);}
+    to{opacity:1; transform:translateX(0);}
+}
+
+.badge{
+    background:#d7efe1;
+    padding:10px 20px;
+    border-radius:25px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    color:#2f8f57;
+    font-weight:600;
+    margin-bottom:25px;
+    font-size:14px;
+    border:1px solid #c9dbd0;
+}
+
+.hero h1{
+    font-size:56px;
+    line-height:1.15;
+    color:#1a2e23;
+    margin-bottom:20px;
+    font-weight:700;
+}
+
+.hero h1 span{
+    color:#2f8f57;
+    position:relative;
+    display:inline-block;
+}
+
+.hero h1 span::after{
+    content:'';
+    position:absolute;
+    bottom:5px;
+    left:0;
+    width:100%;
+    height:8px;
+    background:#d7efe1;
+    z-index:-1;
+}
+
+.hero p{
+    font-size:18px;
+    line-height:1.7;
+    color:#5a7b69;
+    margin-bottom:35px;
+}
+
+.buttons{
+    display:flex;
+    gap:18px;
+    margin-bottom:40px;
+}
+
+.primary-btn{
+    background:#2f8f57;
+    color:white;
+    padding:16px 32px;
+    border-radius:30px;
+    text-decoration:none;
+    font-weight:600;
+    font-size:16px;
+    transition:0.3s;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    box-shadow:0 4px 15px rgba(47,143,87,0.3);
+}
+
+.primary-btn:hover{
+    background:#1f6b42;
+    transform:translateY(-3px);
+    box-shadow:0 6px 20px rgba(47,143,87,0.4);
+}
+
+.secondary-btn{
+    background:transparent;
+    padding:16px 32px;
+    border-radius:30px;
+    text-decoration:none;
+    color:#2f8f57;
+    font-weight:600;
+    font-size:16px;
+    transition:0.3s;
+    border:2px solid #2f8f57;
+}
+
+.secondary-btn:hover{
+    background:#2f8f57;
+    color:white;
+    transform:translateY(-3px);
+}
+
+/* ---------- STATS ---------- */
+.stats{
+    display:flex;
+    gap:50px;
+    padding-top:20px;
+    border-top:1px solid #c9dbd0;
+}
+
+.stat{
+    font-size:32px;
+    color:#2f8f57;
+    font-weight:bold;
+}
+
+.stat span{
+    display:block;
+    font-size:14px;
+    color:#5a7b69;
+    font-weight:500;
+    margin-top:5px;
+}
+
+/* ---------- RIGHT CARD ---------- */
+.hero-right{
+    position:relative;
+    animation:fadeInRight 1s ease;
+    margin-right:60px;
+}
+
+@keyframes fadeInRight{
+    from{opacity:0; transform:translateX(30px);}
+    to{opacity:1; transform:translateX(0);}
+}
+
+/* Decorative background shape */
+.hero-right::before{
+    content:'';
+    position:absolute;
+    top:-20px;
+    right:-20px;
+    width:100%;
+    height:100%;
+    background:linear-gradient(135deg, #d7efe1, #bbf7d0);
+    border-radius:30px;
+    z-index:-1;
+    opacity:0.5;
+}
+
+.hero-right::after{
+    content:'';
+    position:absolute;
+    bottom:-30px;
+    left:-30px;
+    width:200px;
+    height:200px;
+    background:linear-gradient(135deg, #2f8f57, #1f6b42);
+    border-radius:50%;
+    z-index:-2;
+    opacity:0.1;
+}
+
+.hero-right img{
+    width:550px;
+    height:550px;
+    border-radius:30px;
+    object-fit:cover;
+    box-shadow:0 25px 70px rgba(47,143,87,0.2);
+    transition:0.4s;
+    border:3px solid #fff;
+}
+
+.hero-right img:hover{
+    transform:scale(1.03) rotate(1deg);
+    box-shadow:0 30px 80px rgba(47,143,87,0.25);
+}
+
+.xp-card{
+    position:absolute;
+    bottom:40px;
+    left:-40px;
+    background:white;
+    padding:20px 28px;
+    border-radius:18px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.2);
+    font-size:14px;
+    color:#1a2e23;
+    animation:slideUp 1.5s ease 0.5s both;
+    min-width:280px;
+    border:2px solid #f0f0f0;
+    backdrop-filter:blur(10px);
+}
+
+@keyframes slideUp{
+    from{opacity:0; transform:translateY(30px);}
+    to{opacity:1; transform:translateY(0);}
+}
+
+/* ---------- FEATURES SECTION ---------- */
+.features{
+    padding:100px 80px;
+    text-align:center;
+    background:#fff;
+}
+
+.section-tag{
+    color:#2f8f57;
+    font-weight:700;
+    letter-spacing:3px;
+    font-size:13px;
+    margin-bottom:15px;
+}
+
+.features h2{
+    font-size:42px;
+    color:#1a2e23;
+    margin-bottom:15px;
+}
+
+.section-desc{
+    max-width:700px;
+    margin:0 auto 60px;
+    color:#5a7b69;
+    line-height:1.7;
+    font-size:17px;
+}
+
+.feature-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:30px;
+}
+
+.card{
+    background:#f8faf9;
+    padding:40px 30px;
+    border-radius:20px;
+    text-align:left;
+    border:1px solid #e8ede8;
+    transition:0.4s;
+    cursor:pointer;
+}
+
+.card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 15px 40px rgba(0,0,0,0.1);
+    border-color:#2f8f57;
+}
+
+.card h3{
+    margin-top:20px;
+    color:#1a2e23;
+    font-size:20px;
+}
+
+.card p{
+    margin-top:12px;
+    color:#5a7b69;
+    line-height:1.6;
+    font-size:15px;
+}
+
+.icon{
+    width:60px;
+    height:60px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:15px;
+    font-size:26px;
+    transition:0.3s;
+}
+
+.card:hover .icon{
+    transform:scale(1.1);
+}
+
+/* icon colors */
+.green{background:linear-gradient(135deg, #d7efe1, #bbf7d0);}
+.orange{background:linear-gradient(135deg, #f4e2cc, #fcd9b8);}
+.lightgreen{background:linear-gradient(135deg, #dff0df, #c8e6c9);}
+.gold{background:linear-gradient(135deg, #f1e6d3, #e8d5b5);}
+.blue{background:linear-gradient(135deg, #d6e8f4, #c5dfef);}
+.brown{background:linear-gradient(135deg, #e6ded7, #d9cfc5);}
+
+/* ================= HOW IT WORKS ================= */
+.how{
+    padding:100px 80px;
+    background:linear-gradient(135deg, #e3efe7 0%, #dbe8df 100%);
+    text-align:center;
+}
+
+.steps{
+    margin-top:60px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:40px;
+}
+
+.step{
+    background:white;
+    padding:40px 25px;
+    border-radius:20px;
+    transition:0.3s;
+    border:1px solid #e8ede8;
+}
+
+.step:hover{
+    transform:translateY(-8px);
+    box-shadow:0 15px 40px rgba(0,0,0,0.1);
+}
+
+.step-icon{
+    width:80px;
+    height:80px;
+    margin:auto;
+    border-radius:20px;
+    background:#2f8f57;
+    color:#fff;
+    font-size:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 10px 25px rgba(47,143,87,0.3);
+    transition:0.3s;
+}
+
+.step:hover .step-icon{
+    transform:scale(1.1) rotate(5deg);
+}
+
+.step h3{
+    margin-top:25px;
+    color:#1a2e23;
+    font-size:20px;
+}
+
+.step p{
+    margin-top:10px;
+    color:#5a7b69;
+    font-size:15px;
+    line-height:1.6;
+}
+
+/* ================= WHO ================= */
+.who{
+    padding:100px 80px;
+    text-align:center;
+    background:#fff;
+}
+
+.who-grid{
+    margin-top:60px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:40px;
+}
+
+.who-card{
+    background:#f8faf9;
+    padding:50px 35px;
+    border-radius:20px;
+    border:1px solid #e8ede8;
+    transition:0.4s;
+    cursor:pointer;
+}
+
+.who-card:hover{
+    transform:translateY(-10px);
+    box-shadow:0 15px 40px rgba(0,0,0,0.1);
+    border-color:#2f8f57;
+}
+
+.who-icon{
+    width:90px;
+    height:90px;
+    margin:auto;
+    border-radius:50%;
+    background:linear-gradient(135deg, #d7efe1, #bbf7d0);
+    font-size:36px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:0.3s;
+}
+
+.who-card:hover .who-icon{
+    transform:scale(1.15) rotate(10deg);
+}
+
+.who-card h3{
+    margin-top:25px;
+    color:#1a2e23;
+    font-size:22px;
+}
+
+.who-card p{
+    margin-top:12px;
+    color:#5a7b69;
+    line-height:1.6;
+    font-size:15px;
+}
+
+/* ================= CTA ================= */
+.cta{
+    padding:120px 80px;
+    background:linear-gradient(135deg, #2f8f57 0%, #1f6b42 100%);
+    text-align:center;
+    color:white;
+    position:relative;
+    overflow:hidden;
+}
+
+.cta::before{
+    content:'';
+    position:absolute;
+    top:-50%;
+    right:-50%;
+    width:100%;
+    height:100%;
+    background:radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    animation:pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse{
+    0%, 100%{transform:scale(1);}
+    50%{transform:scale(1.1);}
+}
+
+.cta-icon{
+    font-size:48px;
+    margin-bottom:20px;
+}
+
+.cta h2{
+    font-size:42px;
+    margin-bottom:15px;
+    font-weight:700;
+}
+
+.cta p{
+    margin:20px auto 40px;
+    max-width:650px;
+    opacity:0.95;
+    font-size:18px;
+    line-height:1.7;
+}
+
+.cta-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:#f0a12b;
+    padding:18px 40px;
+    border-radius:40px;
+    color:white;
+    text-decoration:none;
+    font-weight:700;
+    font-size:17px;
+    transition:0.3s;
+    box-shadow:0 8px 25px rgba(240,161,43,0.4);
+}
+
+.cta-btn:hover{
+    background:#d88d1f;
+    transform:translateY(-3px);
+    box-shadow:0 12px 35px rgba(240,161,43,0.5);
+}
+
+/* ================= FOOTER ================= */
+.footer{
+    background:#0e2a1c;
+    padding:50px 80px;
+    color:#d1ddd5;
+    text-align:center;
+}
+
+.footer h3{
+    font-size:24px;
+    margin-bottom:10px;
+    color:#2f8f57;
+}
+
+.footer p{
+    font-size:14px;
+    opacity:0.8;
+}
+
+/* ================= RESPONSIVE ================= */
+@media(max-width:1024px){
+    .navbar{
+        padding:18px 40px;
+    }
+    
+    .hero{
+        padding:120px 40px 60px;
+        flex-direction:column;
+        text-align:center;
+    }
+    
+    .hero-left{
+        max-width:100%;
+    }
+    
+    .hero h1{
+        font-size:42px;
+    }
+    
+    .buttons{
+        justify-content:center;
+    }
+    
+    .stats{
+        justify-content:center;
+    }
+    
+    .hero-right{
+        margin-top:40px;
+        margin-right:0;
+    }
+    
+    .hero-right img{
+        width:100%;
+        max-width:500px;
+        height:auto;
+        min-height:400px;
+    }
+    
+    .xp-card{
+        left:20px;
+        right:20px;
+        min-width:auto;
+    }
+    
+    .feature-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+    
+    .steps{
+        grid-template-columns:repeat(2,1fr);
+    }
+    
+    .who-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:768px){
+    .navbar{
+        padding:15px 20px;
+    }
+    
+    .nav-links{
+        gap:15px;
+    }
+    
+    .nav-links a{
+        font-size:13px;
+    }
+    
+    .join-btn{
+        padding:10px 18px;
+    }
+    
+    .hero{
+        padding:100px 20px 40px;
+    }
+    
+    .hero h1{
+        font-size:32px;
+    }
+    
+    .hero p{
+        font-size:16px;
+    }
+    
+    .buttons{
+        flex-direction:column;
+    }
+    
+    .stats{
+        gap:30px;
+        flex-wrap:wrap;
+    }
+    
+    .hero-right img{
+        width:100%;
+        height:auto;
+        min-height:300px;
+        max-width:100%;
+    }
+    
+    .xp-card{
+        position:relative;
+        left:0;
+        bottom:0;
+        margin-top:20px;
+    }
+    
+    .feature-grid{
+        grid-template-columns:1fr;
+    }
+    
+    .steps{
+        grid-template-columns:1fr;
+    }
+    
+    .features, .how, .who, .cta{
+        padding:60px 20px;
+    }
+}
+</style>
 </head>
 
 <body>
 
 <!-- NAVBAR -->
-<div class="navbar">
+<div class="navbar" id="navbar">
     <div class="logo">🌱 GreenFarm</div>
 
     <div class="nav-links">
-        <!-- <a href="#">Features</a> -->
-        <a href="#">How It Works</a>
-        <a href="#">Who It's For</a>
-
-        <a class="join-btn QUIZ" href="QuizzSelector.html">Start Quiz</a>
-        <a class="join-btn" href="signin.html">Sign In</a>
-        <a class="join-btn" href="signup.html">Sign Up</a>
+        <a href="#features">Features</a>
+        <a href="#how">How It Works</a>
+        <a href="#who">Who It's For</a>
+        <a class="join-btn" href="greenfarm-updated.html">Start Quiz</a>
+        <a class="join-btn outline" href="signin.html">Sign In</a>
     </div>
 </div>
 
@@ -31,146 +755,155 @@
         <div class="badge">🌱 Learn. Grow. Sustain.</div>
 
         <h1>
-            Farm Smarter, <span>Save the Planet</span>
+            Farm Smarter,<br><span>Save the Planet</span>
         </h1>
 
         <p>
-            Master sustainable farming through fun quizzes, real-world challenges,
-            and expert guidance. Earn rewards while making agriculture greener!
+            Master sustainable farming through interactive quizzes, real-world challenges,
+            and expert guidance. Earn rewards while making agriculture greener and more profitable!
         </p>
 
         <div class="buttons">
-            <a href="#" class="primary-btn">Start Learning →</a>
-            <a href="#" class="secondary-btn">Explore Features</a>
+            <a href="signup.html" class="primary-btn">Start Learning Free →</a>
+            <a href="#features" class="secondary-btn">Explore Features</a>
         </div>
 
         <div class="stats">
-            <div class="stat">10K+<span>Learners</span></div>
-            <div class="stat">500+<span>Quizzes</span></div>
-            <div class="stat">50+<span>Experts</span></div>
+            <div class="stat">10,000+<span>Active Learners</span></div>
+            <div class="stat">500+<span>Expert Quizzes</span></div>
+            <div class="stat">50+<span>Industry Experts</span></div>
         </div>
     </div>
 
     <div class="hero-right">
-        <!-- replace with your image -->
-        <img src="hero-farming.jpeg" alt="farm">
+        <img src="hero-farming.jpeg" alt="Sustainable farming landscape" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22500%22 height=%22500%22%3E%3Crect fill=%22%23d7efe1%22 width=%22500%22 height=%22500%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22Arial%22 font-size=%2236%22 fill=%22%232f8f57%22%3E🌱 Farm Image%3C/text%3E%3C/svg%3E'">
 
         <div class="xp-card">
-            🌱 <b>+50 XP Earned!</b><br>
-            Completed Soil Health Quiz
+            <b style="color:#2f8f57; font-size:16px;">🌱 +50 XP Earned!</b><br>
+            <span style="color:#5a7b69; font-size:13px; margin-top:5px; display:block;">Completed Soil Health Quiz</span>
         </div>
     </div>
 
 </section>
-<section class="features">
+
+<!-- FEATURES SECTION -->
+<section class="features" id="features">
 
     <p class="section-tag">FEATURES</p>
     <h2>Everything You Need to Grow</h2>
     <p class="section-desc">
-        Our platform combines education, gamification, and community to make
-        sustainable farming accessible and fun.
+        Our comprehensive platform combines education, gamification, and community support to make
+        sustainable farming accessible, engaging, and rewarding for everyone.
     </p>
 
     <div class="feature-grid">
 
         <div class="card">
             <div class="icon green">🧠</div>
-            <h3>Sustainability Quizzes</h3>
-            <p>Test your knowledge with interactive quizzes on eco-friendly farming techniques and earn points.</p>
+            <h3>Interactive Quizzes</h3>
+            <p>Test and expand your knowledge with expertly designed quizzes on eco-friendly farming techniques, soil management, and sustainable practices.</p>
         </div>
 
         <div class="card">
             <div class="icon orange">🏛️</div>
-            <h3>Archives</h3>
-            <p>Document officially issued by the trusted authorities and build your knowledge.</p>
+            <h3>Official Archives</h3>
+            <p>Access verified documents and resources from trusted agricultural authorities to build comprehensive, evidence-based knowledge.</p>
         </div>
 
         <div class="card">
             <div class="icon lightgreen">🎯</div>
             <h3>Real-World Challenges</h3>
-            <p>Apply what you learn with hands-on challenges designed for real farming scenarios.</p>
+            <p>Apply your learning with practical, hands-on challenges designed to solve actual farming scenarios you'll encounter in the field.</p>
         </div>
 
         <div class="card">
             <div class="icon gold">🏆</div>
             <h3>Rankings & Rewards</h3>
-            <p>Compete on leaderboards and earn badges that showcase your expertise.</p>
+            <p>Compete on global leaderboards, earn prestigious badges, and unlock achievements that showcase your agricultural expertise.</p>
         </div>
 
         <div class="card">
             <div class="icon blue">📊</div>
             <h3>Progress Tracking</h3>
-            <p>Visualize your learning journey with detailed progress reports and milestones.</p>
+            <p>Visualize your learning journey with detailed analytics, progress reports, and personalized recommendations for continuous improvement.</p>
         </div>
 
         <div class="card">
             <div class="icon brown">💬</div>
             <h3>Expert Advisory</h3>
-            <p>Connect directly with trusted agricultural experts for personalized guidance.</p>
+            <p>Connect directly with certified agricultural experts and experienced farmers for personalized guidance and mentorship.</p>
         </div>
 
     </div>
 
 </section>
-<!-- ================= HOW IT WORKS ================= -->
-<section class="how">
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
     <p class="section-tag">HOW IT WORKS</p>
-    <h2>Your Journey to Green Farming</h2>
+    <h2>Your Journey to Sustainable Farming</h2>
+    <p class="section-desc">
+        Follow our proven four-step process to transform your farming knowledge and practices
+    </p>
 
     <div class="steps">
 
         <div class="step">
             <div class="step-icon">📖</div>
             <h3>Learn</h3>
-            <p>Explore modules on sustainable farming practices</p>
+            <p>Explore comprehensive modules on sustainable farming practices, from basics to advanced techniques</p>
         </div>
 
         <div class="step">
             <div class="step-icon">🎮</div>
             <h3>Play & Practice</h3>
-            <p>Take quizzes and complete real-world challenges</p>
+            <p>Engage with interactive quizzes and complete real-world challenges to reinforce your learning</p>
         </div>
 
         <div class="step">
             <div class="step-icon">🎖️</div>
             <h3>Earn & Rank</h3>
-            <p>Gain XP, badges, and climb the leaderboard</p>
+            <p>Gain XP points, unlock badges, and climb the global leaderboard as you progress</p>
         </div>
 
         <div class="step">
             <div class="step-icon">🤝</div>
-            <h3>Connect</h3>
-            <p>Get noticed by recruiters and consult experts</p>
+            <h3>Connect & Grow</h3>
+            <p>Network with industry experts, get noticed by employers, and advance your agricultural career</p>
         </div>
 
     </div>
 </section>
 
 
-<!-- ================= WHO IS IT FOR ================= -->
-<section class="who">
+<!-- WHO IS IT FOR -->
+<section class="who" id="who">
 
     <p class="section-tag">WHO IS IT FOR</p>
-    <h2>Built for Change Makers</h2>
+    <h2>Built for Agricultural Change Makers</h2>
+    <p class="section-desc">
+        Whether you're just starting out or looking to enhance your existing practices,
+        GreenFarm provides the tools and knowledge you need to succeed
+    </p>
 
     <div class="who-grid">
 
         <div class="who-card">
             <div class="who-icon">🚜</div>
             <h3>Emerging Farmers</h3>
-            <p>New farmers looking to adopt sustainable practices from day one.</p>
+            <p>New and aspiring farmers looking to adopt sustainable, profitable practices from day one and build a successful agricultural career.</p>
         </div>
 
         <div class="who-card">
             <div class="who-icon">🎓</div>
             <h3>Agriculture Students</h3>
-            <p>Students who want to showcase practical knowledge to future employers.</p>
+            <p>Students seeking to complement their academic knowledge with practical skills and build a competitive portfolio for future employers.</p>
         </div>
 
         <div class="who-card">
             <div class="who-icon">🌿</div>
-            <h3>Environmental Enthusiasts</h3>
-            <p>Eco-conscious individuals passionate about green agriculture.</p>
+            <h3>Sustainability Advocates</h3>
+            <p>Eco-conscious individuals and professionals passionate about promoting green agriculture and environmental stewardship.</p>
         </div>
 
     </div>
@@ -178,26 +911,78 @@
 </section>
 
 
-<!-- ================= CTA ================= -->
+<!-- CTA -->
 <section class="cta">
     <div class="cta-icon">🌱</div>
-    <h2>Ready to Grow Your Knowledge?</h2>
+    <h2>Ready to Transform Your Farming Knowledge?</h2>
     <p>
-        Join thousands of learners making agriculture more sustainable —
-        one quiz at a time.
+        Join over 10,000 farmers and students who are mastering sustainable agriculture —
+        one quiz at a time. Start your journey today, completely free!
     </p>
 
-    <a href="#" class="cta-btn">Get Started Free →</a>
+    <a href="signup.html" class="cta-btn">Get Started Free →</a>
 </section>
 
 
-<!-- ================= FOOTER ================= -->
+<!-- FOOTER -->
 <footer class="footer">
-    <div class="footer-inner">
-        <h3>🌱 GreenFarm</h3>
-        <p>© 2026 GreenFarm. Building a sustainable future through education.</p>
-    </div>
+    <h3>🌱 GreenFarm</h3>
+    <p>© 2026 GreenFarm Education Platform. Building a sustainable future through gamified learning.</p>
+    <p style="margin-top:15px; font-size:12px;">
+        <a href="#" style="color:#2f8f57; text-decoration:none; margin:0 10px;">Privacy Policy</a> |
+        <a href="#" style="color:#2f8f57; text-decoration:none; margin:0 10px;">Terms of Service</a> |
+        <a href="#" style="color:#2f8f57; text-decoration:none; margin:0 10px;">Contact Us</a>
+    </p>
 </footer>
+
+<script>
+// Navbar scroll effect
+window.addEventListener('scroll', function() {
+    const navbar = document.getElementById('navbar');
+    if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+    } else {
+        navbar.classList.remove('scrolled');
+    }
+});
+
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Intersection Observer for scroll animations
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver(function(entries) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+// Observe all cards and sections
+document.querySelectorAll('.card, .step, .who-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+});
+</script>
 
 </body>
 </html>
