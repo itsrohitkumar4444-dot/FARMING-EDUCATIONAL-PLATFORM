@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certification Programs - GreenFarm</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background: #f9fbf9;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 10%;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2ecc71;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #2ecc71;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+            padding: 80px 10%;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            opacity: 0.95;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease;
+        }
+
+        /* Certificates Grid */
+        .certificates-section {
+            padding: 80px 10%;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .section-header p {
+            color: #666;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .certificates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .certificate-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .certificate-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(46, 204, 113, 0.2);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .provider-logo {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .card-header h3 {
+            font-size: 1.6rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .provider-name {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .course-description {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            min-height: 100px;
+        }
+
+        .course-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .course-features li {
+            padding: 8px 0;
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .course-features li::before {
+            content: '✓';
+            color: #2ecc71;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .card-footer {
+            padding: 0 30px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2ecc71;
+        }
+
+        .price-period {
+            font-size: 0.9rem;
+            color: #999;
+            font-weight: normal;
+        }
+
+        .enroll-btn {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .enroll-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(46, 204, 113, 0.4);
+        }
+
+        .badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f39c12;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            z-index: 10;
+        }
+
+        .badge.popular {
+            background: #e74c3c;
+        }
+
+        .badge.new {
+            background: #3498db;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 60px 10%;
+            margin: 80px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: #2ecc71;
+        }
+
+        .stat-item p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 40px 10%;
+            text-align: center;
+        }
+
+        .footer h3 {
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        .footer p {
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 5%;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .certificates-section {
+                padding: 50px 5%;
+            }
+
+            .certificates-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .section-header h2 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+
+            .card-footer {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+
+            .enroll-btn {
+                width: 100%;
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 100px 20px;
+            font-size: 1.5rem;
+            color: #2ecc71;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo" onclick="window.location.href='index2.html'">🌱 GreenFarm</div>
+        <div class="nav-links">
+            <a href="Dashboard.html" id="navHomeLink">Home</a>
+            <a href="archives.html">Archives</a>
+            <a href="QuizzSelector.html">Quizzes</a>
+            <div class="user-info" id="userInfo">
+                <div class="user-avatar" id="userAvatar"></div>
+                <button class="logout-btn" onclick="logoutUser()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">🎓 PROFESSIONAL CERTIFICATION PROGRAMS</div>
+        <h1>Advance Your Career in Sustainable Agriculture</h1>
+        <p>Industry-recognized certifications from leading agricultural organizations worldwide</p>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3>15+</h3>
+                <p>Certification Programs</p>
+            </div>
+            <div class="stat-item">
+                <h3>5,000+</h3>
+                <p>Certified Professionals</p>
+            </div>
+            <div class="stat-item">
+                <h3>90%</h3>
+                <p>Job Placement Rate</p>
+            </div>
+            <div class="stat-item">
+                <h3>50+</h3>
+                <p>Partner Organizations</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certificates Section -->
+    <section class="certificates-section">
+        <div class="section-header">
+            <h2>Available Certification Programs</h2>
+            <p>Choose from our comprehensive range of professional certifications designed to boost your agricultural expertise</p>
+        </div>
+
+        <div class="certificates-grid">
+            
+            <!-- Certificate 1 -->
+            <div class="certificate-card">
+                <span class="badge popular">Most Popular</span>
+                <div class="card-header">
+                    <div class="provider-logo">🌾</div>
+                    <h3>Certified Organic Farmer</h3>
+                    <p class="provider-name">International Organic Agriculture Federation (IFOAM)</p>
+                </div>
+                <div class="card-body">
+                    <p class="course-description">
+                        Master organic farming principles, soil health management, pest control without chemicals, and sustainable crop rotation techniques. Get certified by the world's leading organic agriculture organization.
+                    </p>
+                    <ul class="course-features">
+                        <li>12-week comprehensive program</li>
+                        <li>Hands-on farm internship</li>
+                        <li>Global recognition</li>
+                        <li>Lifetime certification validity</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <div class="price">₹4,000 <span class="price-period">/ one-time</span></div>
+                    <button class="enroll-btn" onclick="enrollCourse('Certified Organic Farmer')">Enroll Now</button>
+                </div>
+            </div>
+
+            <!-- Certificate 2 -->
+            <div class="certificate-card">
+                <span class="badge new">New</span>
+                <div class="card-header">
+                    <div class="provider-logo">💧</div>
+                    <h3>Water Management Specialist</h3>
+                    <p class="provider-name">UNESCO-IHE Institute for Water Education</p>
+                </div>
+                <div class="card-body">
+                    <p class="course-description">
+                        Learn advanced irrigation techniques, water conservation strategies, and sustainable water resource management for agriculture in water-scarce regions.
+                    </p>
+                    <ul class="course-features">
+                        <li>8-week online program</li>
+                        <li>Field case studies</li>
+                        <li>UN-recognized credential</li>
+                        <li>3 years validity</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <div class="price">₹3,500 <span class="price-period">/ one-time</span></div>
+                    <button class="enroll-btn" onclick="enrollCourse('Water Management Specialist')">Enroll Now</button>
+                </div>
+            </div>
+
+            <!-- Certificate 3 -->
+            <div class="certificate-card">
+                <div class="card-header">
+                    <div class="provider-logo">🌱</div>
+                    <h3>Sustainable Agriculture Professional</h3>
+                    <p class="provider-name">Food and Agriculture Organization (FAO)</p>
+                </div>
+                <div class="card-body">
+                    <p class="course-description">
+                        Comprehensive training in sustainable farming practices, climate-smart agriculture, and biodiversity conservation. Endorsed by the United Nations FAO.
+                    </p>
+                    <ul class="course-features">
+                        <li>16-week intensive course</li>
+                        <li>International field trips</li>
+                        <li>FAO partnership opportunities</li>
+                        <li>5 years validity</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <div class="price">₹6,000 <span class="price-period">/ one-time</span></div>
+                    <button class="enroll-btn" onclick="enrollCourse('Sustainable Agriculture Professional')">Enroll Now</button>
+                </div>
+            </div>
+
+            <!-- Certificate 4 -->
+            <div class="certificate-card">
+                <div class="card-header">
+                    <div class="provider-logo">🌍</div>
+                    <h3>Climate-Smart Agriculture Expert</h3>
+                    <p class="provider-name">World Bank Climate Change Group</p>
+                </div>
+                <div class="card-body">
+                    <p class="course-description">
+                        Understand climate change impacts on agriculture and develop adaptive strategies. Learn carbon farming, greenhouse gas reduction, and climate resilience techniques.
+                    </p>
+                    <ul class="course-features">
+                        <li>10-week online + practical</li>
+                        <li>Climate modeling tools</li>
+                        <li>World Bank recognized</li>
+                        <li>Permanent certification</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <div class="price">₹5,000 <span class="price-period">/ one-time</span></div>
+                    <button class="enroll-btn" onclick="enrollCourse('Climate-Smart Agriculture Expert')">Enroll Now</button>
+                </div>
+            </div>
+
+            <!-- Certificate 5 -->
+            <div class="certificate-card">
+                <span class="badge">Beginner Friendly</span>
+                <div class="card-header">
+                    <div class="provider-logo">🌿</div>
+                    <h3>Permaculture Design Certificate</h3>
+                    <p class="provider-name">Permaculture Research Institute</p>
+                </div>
+                <div class="card-body">
+                    <p class="course-description">
+                        Learn to design sustainable ecosystems that mimic natural patterns. Perfect for beginners interested in holistic land management and regenerative agriculture.
+                    </p>
+                    <ul class="course-features">
+                        <li>6-week foundation course</li>
+                        <li>Design project portfolio</li>
+                        <li>Global network access</li>
+                        <li>Lifetime validity</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <div class="price">₹2,000 <span class="price-period">/ one-time</span></div>
+                    <button class="enroll-btn" onclick="enrollCourse('Permaculture Design Certificate')">Enroll Now</button>
+                </div>
+            </div>
+
+            <!-- Certificate 6 -->
+            <div class="certificate-card">
+                <div class="card-header">
+                    <div class="provider-logo">🔬</div>
+                    <h3>Soil Science Specialist</h3>
+                    <p class="provider-name">International Union of Soil Sciences (IUSS)</p>
+                </div>
+                <div class="card-body">
+                    <p class="course-description">
+                        Deep dive into soil chemistry, microbiology, and conservation. Learn advanced soil testing, nutrient management, and restoration techniques.
+                    </p>
+                    <ul class="course-features">
+                        <li>14-week laboratory course</li>
+                        <li>Advanced soil testing kit</li>
+                        <li>IUSS membership included</li>
+                        <li>5 years validity</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <div class="price">₹4,000 <span class="price-period">/ one-time</span></div>
+                    <button class="enroll-btn" onclick="enrollCourse('Soil Science Specialist')">Enroll Now</button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <h3>🌱 GreenFarm</h3>
+            <p>© 2026 GreenFarm. Empowering sustainable agriculture through education.</p>
+        </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script>
+        // Check if user is logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            // Require authentication
+            if (!isUserLoggedIn()) {
+                // Store current page for redirect after login
+                sessionStorage.setItem('greenfarm_redirect', window.location.pathname);
+                alert('Please sign up or log in to view our certification programs.');
+                window.location.href = 'signup.html';
+                return;
+            }
+
+            // Display user info
+            const currentUser = getCurrentUser();
+            const userAvatar = document.getElementById('userAvatar');
+            const navHomeLink = document.getElementById('navHomeLink');
+
+            if (currentUser) {
+                // Set user avatar (first letter of name)
+                const firstLetter = currentUser.fullName.charAt(0).toUpperCase();
+                userAvatar.textContent = firstLetter;
+
+                // Update nav link to Dashboard
+                navHomeLink.textContent = 'Dashboard';
+                navHomeLink.href = 'Dashboard.html';
+            }
+        });
+
+        // Enroll in course
+        function enrollCourse(courseName) {
+            const currentUser = getCurrentUser();
+            
+            if (!currentUser) {
+                alert('Please log in to enroll in this course.');
+                window.location.href = 'signin.html';
+                return;
+            }
+
+            // Add activity
+            addActivity({
+                type: 'course_enrollment',
+                description: `Enrolled in ${courseName}`,
+                icon: '🎓'
+            });
+
+            // Show confirmation
+            alert(`🎉 Congratulations, ${currentUser.fullName}!\n\nYou've successfully enrolled in:\n"${courseName}"\n\nA confirmation email has been sent to ${currentUser.email}.\n\nYou can access your course materials from the Dashboard.`);
+            
+            // Redirect to dashboard
+            setTimeout(() => {
+                window.location.href = 'Dashboard.html';
+            }, 2000);
+        }
+
+        // Smooth scroll animation
+        document.querySelectorAll('.certificate-card').forEach((card, index) => {
+            card.style.animation = `fadeInUp 0.6s ease ${index * 0.1}s both`;
+        });
+    </script>
+
+</body>
+</html>

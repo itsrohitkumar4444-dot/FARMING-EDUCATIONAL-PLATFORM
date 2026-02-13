@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Leaderboard - GreenFarm</title>
+<style>
+*{margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', Arial, Helvetica, sans-serif;}
+body{background:#e3efe7; min-height:100vh;}
+
+/* NAVBAR */
+.navbar{width:100%; background:#fff; display:flex; justify-content:space-between; align-items:center; padding:18px 60px; position:fixed; top:0; z-index:1000; box-shadow:0 2px 10px rgba(0,0,0,0.05);}
+.logo{font-size:22px; font-weight:bold; color:#1f3d2b; cursor:pointer;}
+.nav-links{display:flex; gap:25px; align-items:center;}
+.nav-links a{text-decoration:none; color:#4d6b5a; font-weight:500; transition:0.3s;}
+.nav-links a:hover{color:#2f8f57;}
+.nav-btn{background:#2f8f57; color:white; padding:10px 20px; border-radius:25px; font-weight:600; cursor:pointer; transition:0.3s; text-decoration:none;}
+.nav-btn:hover{background:#1f6b42; transform:translateY(-2px);}
+
+/* CONTAINER */
+.container{padding:100px 60px 60px; max-width:1200px; margin:auto;}
+
+.header{text-align:center; margin-bottom:50px;}
+.section-tag{color:#2f8f57; font-weight:700; letter-spacing:3px; font-size:13px; margin-bottom:15px;}
+h1{font-size:42px; color:#1a2e23; margin-bottom:15px; font-weight:700;}
+.subtitle{color:#5a7b69; font-size:18px; max-width:700px; margin:0 auto;}
+
+/* USER RANK CARD */
+.user-rank-card{background:#fff; padding:30px; border-radius:20px; box-shadow:0 10px 30px rgba(47,143,87,0.15); margin-bottom:40px; border:2px solid #2f8f57;}
+.rank-header{display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;}
+.rank-title{font-size:20px; font-weight:700; color:#1a2e23;}
+.rank-number{font-size:48px; font-weight:700; color:#2f8f57;}
+.rank-stats{display:grid; grid-template-columns:repeat(4, 1fr); gap:20px;}
+.rank-stat{text-align:center; padding:15px; background:#f8faf9; border-radius:12px;}
+.rank-stat-value{font-size:24px; font-weight:700; color:#2f8f57;}
+.rank-stat-label{font-size:14px; color:#5a7b69; margin-top:5px;}
+
+/* LEADERBOARD TABLE */
+.leaderboard-card{background:#fff; border-radius:20px; box-shadow:0 5px 20px rgba(0,0,0,0.08); overflow:hidden;}
+.leaderboard-header{background:linear-gradient(135deg, #2f8f57 0%, #1f6b42 100%); color:white; padding:25px 30px;}
+.leaderboard-header h2{font-size:24px;}
+
+.leaderboard-table{width:100%; border-collapse:collapse;}
+.leaderboard-table thead{background:#f8faf9;}
+.leaderboard-table th{padding:18px 20px; text-align:left; font-weight:600; color:#1a2e23; border-bottom:2px solid #e8ede8;}
+.leaderboard-table td{padding:18px 20px; border-bottom:1px solid #f0f0f0;}
+.leaderboard-table tr:hover{background:#f8faf9;}
+.leaderboard-table tr.current-user{background:#d7efe1; font-weight:600;}
+
+.rank-badge{display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; font-weight:700; font-size:18px;}
+.rank-1{background:linear-gradient(135deg, #ffd700, #ffed4e); color:#7c2d12;}
+.rank-2{background:linear-gradient(135deg, #c0c0c0, #e8e8e8); color:#1f2937;}
+.rank-3{background:linear-gradient(135deg, #cd7f32, #e8a865); color:#1f2937;}
+.rank-other{background:#f0f0f0; color:#6b7280; font-size:16px;}
+
+.user-info{display:flex; align-items:center; gap:12px;}
+.user-avatar{width:45px; height:45px; border-radius:50%; background:linear-gradient(135deg, #2f8f57, #1f6b42); color:white; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:18px;}
+.user-details{display:flex; flex-direction:column;}
+.user-name{font-weight:600; color:#1a2e23;}
+.user-email{font-size:13px; color:#6b7280;}
+
+.score-value{font-weight:700; color:#2f8f57; font-size:18px;}
+.badge-count{background:#fef3c7; color:#d97706; padding:6px 12px; border-radius:20px; font-weight:600; font-size:14px;}
+.quiz-count{color:#6b7280; font-weight:500;}
+
+.trophy-icon{font-size:24px; margin-right:8px;}
+
+/* FILTERS */
+.filters{display:flex; gap:15px; margin-bottom:30px; flex-wrap:wrap;}
+.filter-btn{padding:12px 24px; border:2px solid #e8ede8; background:#fff; border-radius:25px; cursor:pointer; font-weight:600; color:#5a7b69; transition:0.3s;}
+.filter-btn:hover, .filter-btn.active{border-color:#2f8f57; color:#2f8f57; background:#f0f9f4;}
+
+/* EMPTY STATE */
+.empty-state{text-align:center; padding:60px 20px; color:#6b7280;}
+.empty-state-icon{font-size:64px; margin-bottom:20px;}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .navbar{padding:15px 20px;}
+  .container{padding:80px 20px 40px;}
+  h1{font-size:32px;}
+  .rank-stats{grid-template-columns:repeat(2, 1fr);}
+  .leaderboard-table{font-size:14px;}
+  .leaderboard-table th, .leaderboard-table td{padding:12px 10px;}
+  .user-avatar{width:35px; height:35px; font-size:14px;}
+}
+</style>
+</head>
+<body>
+
+<div class="navbar">
+  <div class="logo" onclick="window.location.href='index.html'">🌱 GreenFarm</div>
+  <div class="nav-links">
+    <a href="Dashboard.html">Dashboard</a>
+    <a href="QuizzSelector.html">Quizzes</a>
+    <a href="archives.html">Archives</a>
+    <a class="nav-btn" href="#" onclick="logoutUser()">Logout</a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="header">
+    <div class="section-tag">GLOBAL RANKINGS</div>
+    <h1>🏆 Leaderboard</h1>
+    <p class="subtitle">Compete with farmers worldwide. Complete quizzes to earn points and climb the rankings!</p>
+  </div>
+
+  <!-- User's Current Rank -->
+  <div class="user-rank-card" id="userRankCard">
+    <div class="rank-header">
+      <div class="rank-title">Your Global Ranking</div>
+      <div class="rank-number">#<span id="userRank">--</span></div>
+    </div>
+    <div class="rank-stats">
+      <div class="rank-stat">
+        <div class="rank-stat-value" id="userScore">0</div>
+        <div class="rank-stat-label">Total Score</div>
+      </div>
+      <div class="rank-stat">
+        <div class="rank-stat-value" id="userBadges">0</div>
+        <div class="rank-stat-label">Badges Earned</div>
+      </div>
+      <div class="rank-stat">
+        <div class="rank-stat-value" id="userQuizzes">0</div>
+        <div class="rank-stat-label">Quizzes Done</div>
+      </div>
+      <div class="rank-stat">
+        <div class="rank-stat-value" id="userAccuracy">0%</div>
+        <div class="rank-stat-label">Accuracy</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterLeaderboard('all')">All Users</button>
+    <button class="filter-btn" onclick="filterLeaderboard('top100')">Top 100</button>
+    <button class="filter-btn" onclick="filterLeaderboard('top10')">Top 10</button>
+  </div>
+
+  <!-- Leaderboard Table -->
+  <div class="leaderboard-card">
+    <div class="leaderboard-header">
+      <h2><span class="trophy-icon">🏆</span>Global Rankings</h2>
+    </div>
+    
+    <table class="leaderboard-table">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Farmer</th>
+          <th>Total Score</th>
+          <th>Badges</th>
+          <th>Quizzes</th>
+        </tr>
+      </thead>
+      <tbody id="leaderboardBody">
+        <!-- Leaderboard rows will be inserted here -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+// Protect page - require authentication
+requireAuth();
+
+const currentUser = getCurrentUser();
+let allUsers = [];
+let currentFilter = 'all';
+
+// Initialize page
+function initializePage() {
+  if (!currentUser) {
+    window.location.href = 'signin.html';
+    return;
+  }
+
+  loadLeaderboard();
+  displayUserRank();
+}
+
+// Load and display leaderboard
+function loadLeaderboard() {
+  allUsers = getAllUsersForLeaderboard();
+  displayLeaderboard(allUsers);
+}
+
+// Display leaderboard based on filter
+function displayLeaderboard(users) {
+  const tbody = document.getElementById('leaderboardBody');
+  tbody.innerHTML = '';
+
+  if (users.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" style="text-align:center; padding:40px;">
+          <div class="empty-state">
+            <div class="empty-state-icon">📊</div>
+            <p>No users found. Be the first to complete a quiz!</p>
+          </div>
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  users.forEach((user, index) => {
+    const rank = index + 1;
+    const isCurrentUser = user.email === currentUser.email;
+    const row = document.createElement('tr');
+    if (isCurrentUser) row.classList.add('current-user');
+
+    row.innerHTML = `
+      <td>
+        <div class="rank-badge ${getRankClass(rank)}">
+          ${getRankDisplay(rank)}
+        </div>
+      </td>
+      <td>
+        <div class="user-info">
+          <div class="user-avatar">${getInitials(user.fullName)}</div>
+          <div class="user-details">
+            <div class="user-name">${user.fullName} ${isCurrentUser ? '(You)' : ''}</div>
+            <div class="user-email">${maskEmail(user.email)}</div>
+          </div>
+        </div>
+      </td>
+      <td><span class="score-value">${user.totalScore.toLocaleString()}</span></td>
+      <td><span class="badge-count">${user.badges} 🏅</span></td>
+      <td><span class="quiz-count">${user.quizzesCompleted}</span></td>
+    `;
+
+    tbody.appendChild(row);
+  });
+}
+
+// Display current user's rank
+function displayUserRank() {
+  const userIndex = allUsers.findIndex(u => u.email === currentUser.email);
+  const rank = userIndex !== -1 ? userIndex + 1 : '--';
+
+  document.getElementById('userRank').textContent = rank;
+  document.getElementById('userScore').textContent = currentUser.stats.totalScore.toLocaleString();
+  document.getElementById('userBadges').textContent = currentUser.stats.badges || 0;
+  document.getElementById('userQuizzes').textContent = currentUser.stats.quizzesCompleted || 0;
+  document.getElementById('userAccuracy').textContent = (currentUser.stats.accuracyRate || 0) + '%';
+}
+
+// Filter leaderboard
+function filterLeaderboard(filter) {
+  currentFilter = filter;
+  
+  // Update active button
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+
+  let filteredUsers = [...allUsers];
+  
+  switch(filter) {
+    case 'top10':
+      filteredUsers = filteredUsers.slice(0, 10);
+      break;
+    case 'top100':
+      filteredUsers = filteredUsers.slice(0, 100);
+      break;
+    default:
+      // Show all
+      break;
+  }
+
+  displayLeaderboard(filteredUsers);
+}
+
+// Get rank class for styling
+function getRankClass(rank) {
+  if (rank === 1) return 'rank-1';
+  if (rank === 2) return 'rank-2';
+  if (rank === 3) return 'rank-3';
+  return 'rank-other';
+}
+
+// Get rank display (trophy for top 3)
+function getRankDisplay(rank) {
+  if (rank === 1) return '👑';
+  if (rank === 2) return '🥈';
+  if (rank === 3) return '🥉';
+  return rank;
+}
+
+// Get user initials
+function getInitials(name) {
+  return name
+    .split(' ')
+    .map(word => word[0])
+    .join('')
+    .toUpperCase()
+    .substring(0, 2);
+}
+
+// Mask email for privacy
+function maskEmail(email) {
+  const [name, domain] = email.split('@');
+  if (name.length <= 3) return email;
+  return name.substring(0, 2) + '***@' + domain;
+}
+
+// Initialize on load
+initializePage();
+
+// Auto-refresh every 30 seconds
+setInterval(() => {
+  loadLeaderboard();
+  displayUserRank();
+}, 30000);
+</script>
+
+</body>
+</html>

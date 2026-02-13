@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expert Network - GreenFarm</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f9fbf9;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 10%;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2ecc71;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #2ecc71;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+            padding: 60px 10%;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            padding: 30px 10%;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-tag {
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-tag:hover, .filter-tag.active {
+            background: #2ecc71;
+            color: white;
+            border-color: #2ecc71;
+        }
+
+        /* Experts Grid */
+        .experts-section {
+            padding: 60px 10%;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .experts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .expert-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .expert-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(46, 204, 113, 0.2);
+        }
+
+        .expert-header {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            padding: 40px 30px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .expert-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: white;
+            color: #2ecc71;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0 auto 15px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .expert-name {
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .expert-title {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+        }
+
+        .verified-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .expert-body {
+            padding: 25px;
+        }
+
+        .expertise-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .expertise-tag {
+            background: #e8f5e9;
+            color: #2ecc71;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .expert-bio {
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .expert-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 15px 0;
+            border-top: 1px solid #f0f0f0;
+            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2ecc71;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        .expert-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #2ecc71;
+            border: 2px solid #2ecc71;
+        }
+
+        .btn-secondary:hover {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .btn-secondary.following {
+            background: #2ecc71;
+            color: white;
+            border-color: #2ecc71;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 40px 10%;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .footer h3 {
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        .footer p {
+            color: #bdc3c7;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 5%;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .experts-section {
+                padding: 40px 5%;
+            }
+
+            .experts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-section {
+                padding: 20px 5%;
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: #2c3e50;
+            font-size: 1.5rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-modal:hover {
+            color: #e74c3c;
+        }
+
+        .experience-item {
+            background: #f9fbf9;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #2ecc71;
+        }
+
+        .experience-year {
+            color: #2ecc71;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .experience-desc {
+            color: #666;
+            line-height: 1.7;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo" onclick="window.location.href='index2.html'">🌱 GreenFarm</div>
+        <div class="nav-links">
+            <a href="index2.html" id="navHomeLink">Home</a>
+            <a href="Dashboard.html">Dashboard</a>
+            <a href="experts.html">Experts</a>
+            <a href="community.html">Community</a>
+            <a href="certificates.html">Certifications</a>
+            <button class="logout-btn" onclick="logoutUser()">Logout</button>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1>🌟 Connect with Agriculture Experts</h1>
+        <p>Learn from experienced professionals, get personalized advice, and grow your network in sustainable agriculture</p>
+    </section>
+
+    <!-- Filter Section -->
+    <section class="filter-section">
+        <div class="filter-container">
+            <span style="font-weight: 600; color: #2c3e50;">Filter by Expertise:</span>
+            <div class="filter-tag active" data-filter="all">All Experts</div>
+            <div class="filter-tag" data-filter="Organic Farming">🌾 Organic Farming</div>
+            <div class="filter-tag" data-filter="Soil Science">🔬 Soil Science</div>
+            <div class="filter-tag" data-filter="Water Management">💧 Water Management</div>
+            <div class="filter-tag" data-filter="Permaculture">🌿 Permaculture</div>
+            <div class="filter-tag" data-filter="Climate Adaptation">🌍 Climate Adaptation</div>
+        </div>
+    </section>
+
+    <!-- Experts Grid -->
+    <section class="experts-section">
+        <div class="section-header">
+            <h2>Meet Our Expert Community</h2>
+        </div>
+
+        <div class="experts-grid" id="expertsGrid">
+            <!-- Experts will be loaded dynamically -->
+        </div>
+    </section>
+
+    <!-- Experience Modal -->
+    <div class="modal" id="experienceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalExpertName">Expert Experience</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modalExperienceContent">
+                <!-- Experience details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <h3>🌱 GreenFarm</h3>
+        <p>© 2026 GreenFarm. Connecting agricultural professionals worldwide.</p>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script>
+        // Require authentication
+        if (!isUserLoggedIn()) {
+            sessionStorage.setItem('greenfarm_redirect', window.location.pathname);
+            alert('Please sign in to connect with experts.');
+            window.location.href = 'signin.html';
+        }
+
+        // Expert data
+        const experts = [
+            {
+                id: 'exp001',
+                name: 'Dr. Priya Sharma',
+                title: 'Organic Farming Specialist',
+                avatar: 'PS',
+                expertise: ['Organic Farming', 'Soil Science', 'Crop Rotation'],
+                bio: '25+ years in organic agriculture. Former director at Indian Council of Agricultural Research. Passionate about sustainable farming and soil health.',
+                followers: 1250,
+                posts: 342,
+                experience: 25,
+                verified: true,
+                experiences: [
+                    { year: '2020-Present', desc: 'Lead Consultant - National Organic Farming Initiative' },
+                    { year: '2010-2020', desc: 'Director - ICAR Organic Agriculture Division' },
+                    { year: '1998-2010', desc: 'Senior Research Scientist - Soil Health Management' }
+                ]
+            },
+            {
+                id: 'exp002',
+                name: 'Rajesh Kumar',
+                title: 'Permaculture Designer',
+                avatar: 'RK',
+                expertise: ['Permaculture', 'Water Management', 'Sustainable Design'],
+                bio: 'Award-winning permaculture designer. Transformed over 500 acres of degraded land. Mentor for regenerative agriculture projects.',
+                followers: 890,
+                posts: 215,
+                experience: 18,
+                verified: true,
+                experiences: [
+                    { year: '2015-Present', desc: 'Founder - GreenScape Permaculture Consultancy' },
+                    { year: '2008-2015', desc: 'Permaculture Trainer - Auroville Earth Institute' },
+                    { year: '2005-2008', desc: 'Ecological Restoration Specialist' }
+                ]
+            },
+            {
+                id: 'exp003',
+                name: 'Dr. Anjali Mehta',
+                title: 'Climate Adaptation Researcher',
+                avatar: 'AM',
+                expertise: ['Climate Adaptation', 'Drought Resistance', 'Crop Selection'],
+                bio: 'Climate scientist focusing on agricultural adaptation. Published 50+ research papers. UNESCO Climate Change Expert.',
+                followers: 2100,
+                posts: 178,
+                experience: 20,
+                verified: true,
+                experiences: [
+                    { year: '2018-Present', desc: 'Senior Climate Scientist - UNESCO Climate Program' },
+                    { year: '2012-2018', desc: 'Research Lead - Climate Resilient Agriculture' },
+                    { year: '2006-2012', desc: 'Assistant Professor - Agricultural Meteorology' }
+                ]
+            },
+            {
+                id: 'exp004',
+                name: 'Suresh Patel',
+                title: 'Water Conservation Expert',
+                avatar: 'SP',
+                expertise: ['Water Management', 'Irrigation Systems', 'Rainwater Harvesting'],
+                bio: 'Pioneered micro-irrigation techniques in semi-arid regions. Helped 10,000+ farmers optimize water usage. TEDx speaker.',
+                followers: 1540,
+                posts: 289,
+                experience: 22,
+                verified: true,
+                experiences: [
+                    { year: '2016-Present', desc: 'Water Management Consultant - World Bank' },
+                    { year: '2009-2016', desc: 'Director - Drip Irrigation Innovation Center' },
+                    { year: '2002-2009', desc: 'Agricultural Engineer - Water Resource Dept' }
+                ]
+            },
+            {
+                id: 'exp005',
+                name: 'Maya Singh',
+                title: 'Soil Microbiologist',
+                avatar: 'MS',
+                expertise: ['Soil Science', 'Microbiology', 'Composting'],
+                bio: 'Expert in soil microbiology and biofertilizers. Developed indigenous microorganism solutions used by 5000+ farmers.',
+                followers: 670,
+                posts: 156,
+                experience: 12,
+                verified: true,
+                experiences: [
+                    { year: '2019-Present', desc: 'Founder - Living Soil Solutions' },
+                    { year: '2014-2019', desc: 'Research Scientist - Soil Microbial Ecology' },
+                    { year: '2012-2014', desc: 'PhD Research - Beneficial Soil Microbes' }
+                ]
+            },
+            {
+                id: 'exp006',
+                name: 'Arjun Reddy',
+                title: 'Regenerative Agriculture Pioneer',
+                avatar: 'AR',
+                expertise: ['Organic Farming', 'Permaculture', 'Carbon Farming'],
+                bio: 'Successfully transitioned 200+ conventional farms to regenerative models. Carbon sequestration specialist.',
+                followers: 1820,
+                posts: 401,
+                experience: 16,
+                verified: true,
+                experiences: [
+                    { year: '2017-Present', desc: 'CEO - Regenerate India Foundation' },
+                    { year: '2011-2017', desc: 'Carbon Farming Specialist - FAO' },
+                    { year: '2008-2011', desc: 'Sustainable Agriculture Trainer' }
+                ]
+            }
+        ];
+
+        // Get following data from localStorage
+        function getFollowing() {
+            const following = localStorage.getItem('greenfarm_following');
+            return following ? JSON.parse(following) : [];
+        }
+
+        function saveFollowing(following) {
+            localStorage.setItem('greenfarm_following', JSON.stringify(following));
+        }
+
+        function isFollowing(expertId) {
+            const currentUser = getCurrentUser();
+            if (!currentUser) return false;
+            const following = getFollowing();
+            return following.some(f => f.userId === currentUser.id && f.expertId === expertId);
+        }
+
+        // Render experts
+        function renderExperts(filter = 'all') {
+            const grid = document.getElementById('expertsGrid');
+            grid.innerHTML = '';
+
+            const filtered = filter === 'all' 
+                ? experts 
+                : experts.filter(e => e.expertise.includes(filter));
+
+            filtered.forEach(expert => {
+                const following = isFollowing(expert.id);
+                
+                const card = document.createElement('div');
+                card.className = 'expert-card';
+                card.innerHTML = `
+                    ${expert.verified ? '<div class="verified-badge">✓ Verified</div>' : ''}
+                    <div class="expert-header">
+                        <div class="expert-avatar">${expert.avatar}</div>
+                        <div class="expert-name">${expert.name}</div>
+                        <div class="expert-title">${expert.title}</div>
+                    </div>
+                    <div class="expert-body">
+                        <div class="expertise-tags">
+                            ${expert.expertise.map(e => `<span class="expertise-tag">${e}</span>`).join('')}
+                        </div>
+                        <p class="expert-bio">${expert.bio}</p>
+                        <div class="expert-stats">
+                            <div class="stat">
+                                <div class="stat-number">${expert.followers}</div>
+                                <div class="stat-label">Followers</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${expert.posts}</div>
+                                <div class="stat-label">Posts</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-number">${expert.experience}y</div>
+                                <div class="stat-label">Experience</div>
+                            </div>
+                        </div>
+                        <div class="expert-actions">
+                            <button class="btn btn-secondary ${following ? 'following' : ''}" onclick="toggleFollow('${expert.id}')">
+                                ${following ? '✓ Following' : '+ Follow'}
+                            </button>
+                            <button class="btn btn-primary" onclick="viewExperience('${expert.id}')">View Experience</button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.filter-tag').forEach(tag => {
+            tag.addEventListener('click', function() {
+                document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                const filter = this.dataset.filter;
+                renderExperts(filter);
+            });
+        });
+
+        // Toggle follow
+        function toggleFollow(expertId) {
+            const currentUser = getCurrentUser();
+            if (!currentUser) {
+                alert('Please log in to follow experts');
+                return;
+            }
+
+            let following = getFollowing();
+            const followIndex = following.findIndex(f => f.userId === currentUser.id && f.expertId === expertId);
+
+            if (followIndex > -1) {
+                // Unfollow
+                following.splice(followIndex, 1);
+                saveFollowing(following);
+                
+                // Update expert followers count
+                const expert = experts.find(e => e.id === expertId);
+                if (expert) expert.followers--;
+                
+                // Render
+                renderExperts(document.querySelector('.filter-tag.active').dataset.filter);
+            } else {
+                // Follow
+                following.push({
+                    userId: currentUser.id,
+                    expertId: expertId,
+                    followedAt: new Date().toISOString()
+                });
+                saveFollowing(following);
+                
+                // Update expert followers count
+                const expert = experts.find(e => e.id === expertId);
+                if (expert) expert.followers++;
+                
+                // Add activity
+                addActivity({
+                    type: 'expert_follow',
+                    description: `Started following ${expert.name}`,
+                    icon: '👤'
+                });
+                
+                // Render
+                renderExperts(document.querySelector('.filter-tag.active').dataset.filter);
+            }
+        }
+
+        // View experience
+        function viewExperience(expertId) {
+            const expert = experts.find(e => e.id === expertId);
+            if (!expert) return;
+
+            document.getElementById('modalExpertName').textContent = `${expert.name}'s Experience`;
+            
+            const content = document.getElementById('modalExperienceContent');
+            content.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: #2c3e50; margin-bottom: 10px;">Professional Journey</h4>
+                    ${expert.experiences.map(exp => `
+                        <div class="experience-item">
+                            <div class="experience-year">${exp.year}</div>
+                            <div class="experience-desc">${exp.desc}</div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn btn-primary" onclick="goToCommunity()">View ${expert.name}'s Posts on Community</button>
+                </div>
+            `;
+
+            document.getElementById('experienceModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('experienceModal').style.display = 'none';
+        }
+
+        function goToCommunity() {
+            window.location.href = 'community.html';
+        }
+
+        // Update navbar
+        document.addEventListener('DOMContentLoaded', function() {
+            const navHomeLink = document.getElementById('navHomeLink');
+            if (isUserLoggedIn()) {
+                navHomeLink.textContent = 'Dashboard';
+                navHomeLink.href = 'Dashboard.html';
+            }
+        });
+
+        // Initial render
+        renderExperts();
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById('experienceModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+
+</body>
+</html>

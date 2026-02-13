@@ -258,7 +258,7 @@ body{
 /* ---------- NAVIGATION CARDS ---------- */
 .nav-grid{
     display:grid;
-    grid-template-columns:repeat(2, 1fr);
+    grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
     gap:20px;
     margin-bottom:30px;
 }
@@ -392,8 +392,9 @@ body{
     <div class="nav-links">
         <a href="index2.html">Home</a>
         <a href="dashboard.html">Dashboard</a>
-        <a href="#">Community</a>
-        <a href="#">Resources</a>
+        <a href="experts.html">Experts</a>
+        <a href="community.html">Community</a>
+        <a href="certificates.html">Certifications</a>
         <span id="guestBadge" style="display:none; background:#f4e2cc; color:#b45309; padding:6px 12px; border-radius:15px; font-size:13px; font-weight:bold;">👤 Guest Mode</span>
         <div class="logout-btn" onclick="logoutUser()">Logout</div>
     </div>
@@ -464,7 +465,15 @@ body{
 
     <!-- NAVIGATION GRID -->
     <div class="nav-grid">
-        <a href="greenfarm-updated.html" class="nav-card">
+        <a href="certificates.html" class="nav-card" style="background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); color: white;">
+            <div class="nav-card-header">
+                <div class="nav-icon" style="background: rgba(255,255,255,0.2);">🎓</div>
+                <div class="nav-card-title" style="color: white;">Professional Certifications</div>
+            </div>
+            <div class="nav-card-desc" style="color: rgba(255,255,255,0.9);">Explore industry-recognized certification programs from leading organizations. Boost your career with credentials from IFOAM, FAO, UNESCO, and more.</div>
+        </a>
+
+        <a href="QuizzSelector.html" class="nav-card">
             <div class="nav-card-header">
                 <div class="nav-icon green-bg">📚</div>
                 <div class="nav-card-title">Active Quizzes</div>
@@ -472,12 +481,28 @@ body{
             <div class="nav-card-desc">Continue your learning journey with interactive quizzes on farming techniques, crop management, and sustainable practices.</div>
         </a>
 
+        <a href="experts.html" class="nav-card">
+            <div class="nav-card-header">
+                <div class="nav-icon purple-bg">🌟</div>
+                <div class="nav-card-title">Expert Network</div>
+            </div>
+            <div class="nav-card-desc">Connect with agriculture experts, learn from their experiences, and get personalized advice on sustainable farming practices.</div>
+        </a>
+
+        <a href="community.html" class="nav-card">
+            <div class="nav-card-header">
+                <div class="nav-icon blue-bg">🌍</div>
+                <div class="nav-card-title">Community Forum</div>
+            </div>
+            <div class="nav-card-desc">Share insights, ask questions, and engage with fellow farmers. Post updates, like content, comment, and follow other members.</div>
+        </a>
+
         <a href="archives.html" class="nav-card">
             <div class="nav-card-header">
-                <div class="nav-icon blue-bg">📁</div>
-                <div class="nav-card-title">Quiz Archives</div>
+                <div class="nav-icon orange-bg">📁</div>
+                <div class="nav-card-title">Knowledge Grove</div>
             </div>
-            <div class="nav-card-desc">Browse and replay completed quizzes. Review your past performance and track your improvement over time.</div>
+            <div class="nav-card-desc">Browse curated study materials and resources. Access comprehensive articles on sustainable agriculture from trusted sources.</div>
         </a>
 
         <a href="leaderboard.html" class="nav-card">
@@ -486,14 +511,6 @@ body{
                 <div class="nav-card-title">Leaderboard</div>
             </div>
             <div class="nav-card-desc">See where you rank among farmers worldwide. Compete with others and climb to the top of the global rankings.</div>
-        </a>
-
-        <a href="community.html" class="nav-card">
-            <div class="nav-card-header">
-                <div class="nav-icon purple-bg">🌍</div>
-                <div class="nav-card-title">Real-World Problems</div>
-            </div>
-            <div class="nav-card-desc">Share challenges, solutions, and insights with farmers facing similar issues. Learn from real experiences in the field.</div>
         </a>
     </div>
 

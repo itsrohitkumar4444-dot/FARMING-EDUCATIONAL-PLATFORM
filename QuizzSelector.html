@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GreenFarm</title>
+  <title>Quiz Hub - GreenFarm</title>
 
   <style>
-    body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #e3efe7; min-height: 100vh; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, Helvetica, sans-serif; }
+    body { background: #e3efe7; min-height: 100vh; }
 
     /* NAVBAR */
     .navbar {
@@ -20,365 +21,759 @@
       box-sizing: border-box;
       position: fixed;
       top: 0;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
 
-    .nav-left { font-size: 22px; font-weight: bold; color: #1f3d2b; }
+    .nav-left {
+      font-size: 22px;
+      font-weight: bold;
+      color: #1f3d2b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-    .nav-right { display: flex; gap: 25px; align-items: center; font-size: 14px; }
+    .nav-right { display: flex; gap: 20px; align-items: center; font-size: 14px; }
 
     .nav-pill {
       background: #cfe7d7;
       padding: 8px 16px;
       border-radius: 20px;
-      font-weight: bold;
+      font-weight: 600;
       color: #2f8f57;
+      cursor: pointer;
+      transition: 0.3s;
     }
 
-    /* Farmer Profile Button Style */
+    .nav-pill:hover {
+      background: #bbf7d0;
+      transform: translateY(-2px);
+    }
+
     .nav-btn {
       background: #2f8f57;
       color: white;
-      padding: 10px 18px;
+      padding: 10px 20px;
       border-radius: 25px;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
-      transition: 0.25s;
+      transition: 0.3s;
+      border: none;
     }
 
     .nav-btn:hover {
       background: #1f6b42;
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(47,143,87,0.3);
     }
 
+    /* CONTAINER */
     .container { 
       width: 100%; 
       min-height: calc(100vh - 76px); 
-      background: #dbe8df; 
-      padding: 100px 60px 40px; 
+      background: linear-gradient(135deg, #e3efe7 0%, #dbe8df 100%);
+      padding: 100px 60px 60px; 
       box-sizing: border-box; 
-      text-align: center; 
     }
 
-    h1 { color: #1a2e23; font-size: 36px; }
-    p { color: #4d6b5a; font-size: 18px; line-height: 1.6; }
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
 
-    .quiz-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 25px; margin-top: 30px; }
+    .section-tag {
+      color: #2f8f57;
+      font-weight: 700;
+      letter-spacing: 3px;
+      font-size: 13px;
+      margin-bottom: 15px;
+    }
+
+    h1 { 
+      color: #1a2e23; 
+      font-size: 42px; 
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .subtitle { 
+      color: #5a7b69; 
+      font-size: 18px; 
+      line-height: 1.6; 
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* QUIZ GRID */
+    .quiz-list { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+      gap: 30px; 
+      max-width: 1400px;
+      margin: 0 auto;
+    }
 
     .quiz-card { 
-      background: #f3f6f4; 
-      padding: 30px; 
-      border-radius: 18px; 
+      background: #fff; 
+      padding: 35px; 
+      border-radius: 20px; 
       cursor: pointer; 
-      transition: 0.3s; 
+      transition: 0.4s; 
       display: flex; 
       flex-direction: column; 
       justify-content: space-between; 
-      min-height: 200px;
-      border: 1px solid #c9dbd0;
+      min-height: 240px;
+      border: 1px solid #e8ede8;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quiz-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: #2f8f57;
+      transform: scaleY(0);
+      transition: 0.3s;
+    }
+    
+    .quiz-card:hover::before {
+      transform: scaleY(1);
     }
     
     .quiz-card:hover { 
-      transform: translateY(-8px); 
-      box-shadow: 0 10px 18px rgba(0,0,0,0.08);
+      transform: translateY(-10px); 
+      box-shadow: 0 15px 40px rgba(47,143,87,0.15);
+      border-color: #2f8f57;
     }
 
-    .quiz-title { font-size: 22px; font-weight: bold; color: #1a2e23; }
-    .quiz-desc { font-size: 16px; color: #5a7b69; margin-top: 10px; line-height: 1.5; }
+    .quiz-icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .quiz-title { 
+      font-size: 24px; 
+      font-weight: 700; 
+      color: #1a2e23; 
+      margin-bottom: 12px;
+    }
+
+    .quiz-desc { 
+      font-size: 15px; 
+      color: #5a7b69; 
+      line-height: 1.6; 
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
 
     .quiz-bottom { 
-      margin-top: 25px; 
+      margin-top: 20px; 
       display: flex; 
       justify-content: space-between; 
-      background: #d7efe1; 
-      padding: 10px 14px; 
+      align-items: center;
+      background: #f8faf9; 
+      padding: 12px 16px; 
       border-radius: 12px; 
-      font-weight: bold; 
-      color: #2f8f57; 
+      font-weight: 600; 
     }
 
-    .hidden { display: none; }
+    .quiz-mode {
+      color: #2f8f57;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .quiz-score {
+      background: #d7efe1;
+      color: #2f8f57;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+
+    .difficulty {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    .easy { background: #d7efe1; color: #2f8f57; }
+    .medium { background: #fef3c7; color: #d97706; }
+    .hard { background: #fee2e2; color: #dc2626; }
+
+    /* MODAL/MODE PAGE */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal.active {
+      display: flex;
+    }
 
     .mode-container { 
+      background: #fff;
       max-width: 900px; 
+      width: 90%;
       margin: auto; 
-      background: #f3f6f4; 
-      padding: 30px; 
-      border-radius: 18px;
-      border: 1px solid #c9dbd0;
+      padding: 40px; 
+      border-radius: 25px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .mode-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e8ede8;
+    }
+
+    .mode-title {
+      font-size: 32px;
+      color: #1a2e23;
+      margin-bottom: 10px;
+    }
+
+    .mode-desc {
+      color: #5a7b69;
+      font-size: 16px;
     }
 
     .question-box { 
-      background: #d7efe1; 
-      padding: 20px; 
+      background: #f8faf9; 
+      padding: 30px; 
       border-radius: 15px; 
       margin-top: 20px; 
+      border: 2px solid #e8ede8;
+    }
+
+    .question-number {
+      color: #2f8f57;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 15px;
+    }
+
+    .question-text {
+      font-size: 20px;
+      color: #1a2e23;
+      font-weight: 600;
+      margin-bottom: 25px;
+      line-height: 1.5;
     }
 
     .option-btn { 
       display: block; 
       width: 100%; 
-      padding: 12px; 
-      margin-top: 10px; 
-      border: none; 
-      border-radius: 10px; 
-      background: #2f8f57; 
-      color: white; 
+      padding: 16px 20px; 
+      margin-top: 12px; 
+      border: 2px solid #e8ede8; 
+      border-radius: 12px; 
+      background: #fff; 
+      color: #1a2e23; 
       cursor: pointer;
       font-weight: 500;
       transition: 0.3s;
+      text-align: left;
+      font-size: 16px;
     }
     
     .option-btn:hover { 
-      background: #1f6b42; 
+      background: #f0f9f4;
+      border-color: #2f8f57;
+      transform: translateX(5px);
+    }
+
+    .option-btn.correct {
+      background: #d7efe1;
+      border-color: #2f8f57;
+      color: #2f8f57;
+    }
+
+    .option-btn.wrong {
+      background: #fee2e2;
+      border-color: #dc2626;
+      color: #dc2626;
     }
 
     .btn { 
-      margin-top: 20px; 
-      padding: 14px 28px; 
+      margin-top: 25px; 
+      padding: 14px 32px; 
       border: none; 
       border-radius: 30px; 
       background: #2f8f57; 
       color: white; 
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 600;
       transition: 0.3s;
+      font-size: 16px;
     }
     
     .btn:hover {
       background: #1f6b42;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(47,143,87,0.3);
+    }
+
+    .btn-secondary {
+      background: #6b7280;
+    }
+
+    .btn-secondary:hover {
+      background: #4b5563;
     }
 
     .timer { 
-      font-size: 22px; 
-      font-weight: bold; 
-      color: #c53030; 
-      margin-top: 15px; 
+      font-size: 24px; 
+      font-weight: 700; 
+      color: #dc2626; 
+      margin: 20px 0;
+      text-align: center;
+      padding: 15px;
+      background: #fee2e2;
+      border-radius: 12px;
     }
 
-    .section-tag {
+    .score-display {
+      text-align: center;
+      padding: 40px;
+    }
+
+    .final-score {
+      font-size: 64px;
+      font-weight: 700;
       color: #2f8f57;
-      font-weight: bold;
-      letter-spacing: 2px;
-      margin-bottom: 10px;
+      margin: 20px 0;
     }
 
+    .score-message {
+      font-size: 24px;
+      color: #1a2e23;
+      margin-bottom: 30px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin: 30px 0;
+    }
+
+    .stat-box {
+      background: #f8faf9;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: #2f8f57;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: #5a7b69;
+      margin-top: 5px;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    /* RESPONSIVE */
+    @media(max-width: 768px) {
+      .navbar { padding: 15px 20px; }
+      .nav-left { font-size: 18px; }
+      .nav-right { gap: 10px; }
+      .nav-pill { padding: 6px 12px; font-size: 12px; }
+      .container { padding: 80px 20px 40px; }
+      h1 { font-size: 32px; }
+      .quiz-list { grid-template-columns: 1fr; }
+      .mode-container { padding: 25px; }
+      .stats-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
 
   <!-- NAVBAR -->
   <div class="navbar">
-    <div class="nav-left">🌱 GreenFarm Quizzes</div>
+    <div class="nav-left" onclick="window.location.href='index.html'">
+      🌱 GreenFarm
+    </div>
     <div class="nav-right">
-      <div class="nav-btn">👤 Farmer Profile</div>
-      <div class="nav-pill">⭐ Score: <span id="navScore">220</span></div>
-      <div class="nav-pill">🏅 Badges: <span id="navBadges">2</span></div>
+      <div class="nav-btn" onclick="window.location.href='Dashboard.html'">👤 Dashboard</div>
+      <div class="nav-pill" onclick="window.location.href='leaderboard.html'">
+        🏆 Rank: <span id="navRank">#--</span>
+      </div>
+      <div class="nav-pill">
+        ⭐ Score: <span id="navScore">0</span>
+      </div>
+      <div class="nav-pill">
+        🏅 Badges: <span id="navBadges">0</span>
+      </div>
     </div>
   </div>
 
-
-  <!-- SELECTION PAGE -->
+  <!-- MAIN CONTENT -->
   <div class="container" id="selectionPage">
-    <div class="section-tag">LEARN AND GROW</div>
-    <h1>Quize Hub</h1>
-    <p>From Seed to Success. Prove you have what it takes to feed the world.</p>
+    <div class="header">
+      <div class="section-tag">QUIZ HUB</div>
+      <h1>Master Sustainable Farming</h1>
+      <p class="subtitle">Choose your challenge and test your knowledge. Each quiz completed earns you points, badges, and improves your global ranking!</p>
+    </div>
 
-    <div class="quiz-list">
-
-      <div class="quiz-card"xonclick="openMode('disaster')">
-        <div><div class="quiz-title">Disaster Survival</div><div class="quiz-desc">Timed crisis decisions</div></div>
-        <div class="quiz-bottom"><div>Timed Mode</div><div>Score: 150</div></div>
-      </div>
-
-      <div class="quiz-card" onclick="openMode('detective')">
-        <div><div class="quiz-title">Agri Detective</div><div class="quiz-desc">Identify plant problems</div></div>
-        <div class="quiz-bottom"><div>Image Mode</div><div>Score: 180</div></div>
-      </div>
-
-      <div class="quiz-card" onclick="openMode('crop')">
-        <div><div class="quiz-title">Crop Cycle</div><div class="quiz-desc">Seasonal crops quiz</div></div>
-        <div class="quiz-bottom"><div>Quiz Mode</div><div>Score: 120</div></div>
-      </div>
-
-      <div class="quiz-card" onclick="openMode('soil')">
-        <div><div class="quiz-title">Soil & Tools</div><div class="quiz-desc">Soil and equipment knowledge</div></div>
-        <div class="quiz-bottom"><div>Knowledge Mode</div><div>Score: 140</div></div>
-      </div>
-
-      <div class="quiz-card" onclick="openMode('climate')">
-        <div><div class="quiz-title">Climate Smart</div><div class="quiz-desc">Weather based decisions</div></div>
-        <div class="quiz-bottom"><div>Strategy Mode</div><div>Score: 160</div></div>
-      </div>
-
-      <div class="quiz-card" onclick="openMode('organic')">
-        <div><div class="quiz-title">Organic Certification</div><div class="quiz-desc">Authority level test</div></div>
-        <div class="quiz-bottom"><div>Exam Mode</div><div>Score: 200</div></div>
-      </div>
-
-      <!-- Random Quiz Card 1 -->
-      <div class="quiz-card" onclick="openMode('water')">
-        <div>
-          <div class="quiz-title">Water Management Pro</div>
-          <div class="quiz-desc">Test smart irrigation and water saving decisions.</div>
-        </div>
-        <div class="quiz-bottom"><div>Decision Mode</div><div>Score: 130</div></div>
-      </div>
-
-      <!-- Random Quiz Card 2 -->
-      <div class="quiz-card" onclick="openMode('pest')">
-        <div>
-          <div class="quiz-title">Pest Control Strategist</div>
-          <div class="quiz-desc">Choose the best eco-friendly pest control methods.</div>
-        </div>
-        <div class="quiz-bottom"><div>Strategy Mode</div><div>Score: 170</div></div>
-      </div>
-
+    <div class="quiz-list" id="quizList">
+      <!-- Quizzes will be loaded here -->
     </div>
   </div>
 
-
-  <!-- MODE PAGE -->
-  <div class="container hidden" id="modePage">
+  <!-- QUIZ MODAL -->
+  <div class="modal" id="quizModal">
     <div class="mode-container">
-      <h1 id="modeTitle"></h1>
-      <p id="modeDesc"></p>
+      <div class="mode-header">
+        <h2 class="mode-title" id="modeTitle"></h2>
+        <p class="mode-desc" id="modeDesc"></p>
+      </div>
 
-      <div class="timer" id="timerBox"></div>
+      <div id="timerBox" class="timer" style="display:none;"></div>
 
-      <div class="question-box">
-        <h3 id="questionText"></h3>
+      <div class="question-box" id="questionBox">
+        <div class="question-number" id="questionNumber"></div>
+        <h3 class="question-text" id="questionText"></h3>
         <div id="optionsArea"></div>
       </div>
 
-      <button class="btn" onclick="backHome()">Back to Quizzes</button>
+      <div class="action-buttons">
+        <button class="btn btn-secondary" onclick="closeQuiz()">Exit Quiz</button>
+      </div>
     </div>
   </div>
 
-
+  <script src="auth.js"></script>
+  <script src="quiz-data.js"></script>
   <script>
+    // Protect this page - require authentication
+    requireAuth();
 
-    let timerInterval;
-    let timeLeft = 15;
-    let userScore = 220;
-    let userBadges = 10;
+    // Get current user and load their stats
+    const currentUser = getCurrentUser();
+    let userScore = currentUser?.stats?.totalScore || 0;
+    let userBadges = currentUser?.stats?.badges || 0;
+    let currentQuiz = null;
+    let currentQuestionIndex = 0;
+    let quizScore = 0;
+    let correctAnswers = 0;
+    let timerInterval = null;
 
-    const disasterQuiz = [
-      {
-        q: "Locust attack predicted. What do you do?",
-        options: ["Early Harvest", "Ignore Warning", "Do Nothing", "Overwater Fields"],
-        correct: 0
-      },
-      {
-        q: "Heavy unseasonal rain forecast. What is best action?",
-        options: ["Cover Crop Storage", "Leave Crop Open", "Increase Irrigation", "Add Fertilizer"],
-        correct: 0
+    // Initialize page
+    function initializePage() {
+      if (!currentUser) {
+        window.location.href = 'signin.html';
+        return;
       }
-    ];
 
-    let disasterIndex = 0;
+      updateNav();
+      loadQuizzes();
+      calculateUserRank();
+    }
 
-    const modes = {
-      disaster: { title: "Disaster Survival Mode", desc: "Answer fast before time runs out!" },
-      detective: { title: "Agri Detective Mode", desc: "Identify plant deficiency." },
-      crop: { title: "Crop Cycle Mode", desc: "Crop season knowledge." },
-      soil: { title: "Soil Knowledge Mode", desc: "Soil type knowledge." },
-      climate: { title: "Climate Smart Mode", desc: "Climate decisions." },
-      organic: { title: "Organic Certification Mode", desc: "Organic standards." },
-      water: { title: "Water Management Mode", desc: "Smart irrigation and water conservation decisions." },
-      pest: { title: "Pest Control Strategy Mode", desc: "Eco-friendly pest control choices." }
-    };
-
+    // Update navbar with user stats
     function updateNav() {
-      document.getElementById("navScore").innerText = userScore;
+      document.getElementById("navScore").innerText = userScore.toLocaleString();
       document.getElementById("navBadges").innerText = userBadges;
     }
 
+    // Calculate and display user's global rank
+    function calculateUserRank() {
+      const allUsers = getAllUsersForLeaderboard();
+      const userIndex = allUsers.findIndex(u => u.email === currentUser.email);
+      const rank = userIndex !== -1 ? userIndex + 1 : '--';
+      document.getElementById("navRank").innerText = rank !== '--' ? `#${rank}` : '#--';
+      
+      // Update user's rank in their stats
+      if (rank !== '--') {
+        updateUserStats({ globalRank: rank });
+      }
+    }
+
+    // Load all available quizzes
+    function loadQuizzes() {
+      const quizList = document.getElementById('quizList');
+      quizList.innerHTML = '';
+
+      QUIZ_CATEGORIES.forEach(category => {
+        const card = document.createElement('div');
+        card.className = 'quiz-card';
+        card.onclick = () => startQuiz(category.id);
+
+        card.innerHTML = `
+          <div>
+            <div class="quiz-icon">${category.icon}</div>
+            <div class="quiz-title">${category.title}</div>
+            <div class="quiz-desc">${category.description}</div>
+            <span class="difficulty ${category.difficulty}">${category.difficulty.toUpperCase()}</span>
+          </div>
+          <div class="quiz-bottom">
+            <div class="quiz-mode">${category.mode}</div>
+            <div class="quiz-score">+${category.points} pts</div>
+          </div>
+        `;
+
+        quizList.appendChild(card);
+      });
+    }
+
+    // Start a quiz
+    function startQuiz(quizId) {
+      const category = QUIZ_CATEGORIES.find(c => c.id === quizId);
+      if (!category) return;
+
+      const quizData = QUIZ_DATA[quizId];
+      if (!quizData || quizData.length === 0) {
+        alert('This quiz is coming soon!');
+        return;
+      }
+
+      currentQuiz = {
+        id: quizId,
+        category: category,
+        questions: quizData,
+        pointsPerQuestion: Math.floor(category.points / quizData.length)
+      };
+
+      currentQuestionIndex = 0;
+      quizScore = 0;
+      correctAnswers = 0;
+
+      document.getElementById('modeTitle').textContent = category.title;
+      document.getElementById('modeDesc').textContent = category.description;
+
+      loadQuestion();
+      document.getElementById('quizModal').classList.add('active');
+    }
+
+    // Load current question
+    function loadQuestion() {
+      if (currentQuestionIndex >= currentQuiz.questions.length) {
+        showResults();
+        return;
+      }
+
+      const question = currentQuiz.questions[currentQuestionIndex];
+      
+      document.getElementById('questionNumber').textContent = 
+        `Question ${currentQuestionIndex + 1} of ${currentQuiz.questions.length}`;
+      document.getElementById('questionText').textContent = question.question;
+
+      const optionsArea = document.getElementById('optionsArea');
+      optionsArea.innerHTML = '';
+
+      question.options.forEach((option, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = option;
+        btn.onclick = () => selectAnswer(index);
+        optionsArea.appendChild(btn);
+      });
+
+      // Start timer if timed quiz
+      if (currentQuiz.category.timed) {
+        startTimer();
+      } else {
+        document.getElementById('timerBox').style.display = 'none';
+      }
+    }
+
+    // Handle answer selection
+    function selectAnswer(selectedIndex) {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
+
+      const question = currentQuiz.questions[currentQuestionIndex];
+      const buttons = document.querySelectorAll('.option-btn');
+      
+      // Disable all buttons
+      buttons.forEach(btn => btn.style.pointerEvents = 'none');
+
+      // Mark correct and wrong answers
+      buttons[question.correctIndex].classList.add('correct');
+      if (selectedIndex !== question.correctIndex) {
+        buttons[selectedIndex].classList.add('wrong');
+      } else {
+        correctAnswers++;
+        quizScore += currentQuiz.pointsPerQuestion;
+      }
+
+      // Move to next question after delay
+      setTimeout(() => {
+        currentQuestionIndex++;
+        loadQuestion();
+      }, 1500);
+    }
+
+    // Start timer for timed quizzes
     function startTimer() {
-      clearInterval(timerInterval);
-      timeLeft = 15;
-      document.getElementById("timerBox").innerText = "Time Left: " + timeLeft + "s";
+      const timerBox = document.getElementById('timerBox');
+      timerBox.style.display = 'block';
+      let timeLeft = 15;
+      timerBox.textContent = `Time Left: ${timeLeft}s`;
 
       timerInterval = setInterval(() => {
         timeLeft--;
-        document.getElementById("timerBox").innerText = "Time Left: " + timeLeft + "s";
+        timerBox.textContent = `Time Left: ${timeLeft}s`;
+        
         if (timeLeft <= 0) {
           clearInterval(timerInterval);
-          nextDisasterQuestion();
+          // Auto-select wrong answer
+          selectAnswer(-1);
         }
       }, 1000);
     }
 
-    function loadDisasterQuestion() {
-      const q = disasterQuiz[disasterIndex];
-      document.getElementById("questionText").innerText = q.q;
-      const area = document.getElementById("optionsArea");
-      area.innerHTML = "";
+    // Show quiz results
+    function showResults() {
+      const questionBox = document.getElementById('questionBox');
+      const totalQuestions = currentQuiz.questions.length;
+      const percentage = Math.round((correctAnswers / totalQuestions) * 100);
 
-      q.options.forEach((opt, i) => {
-        const btn = document.createElement("button");
-        btn.className = "option-btn";
-        btn.innerText = opt;
-        btn.onclick = () => {
-          clearInterval(timerInterval);
-          if (i === q.correct) userScore += 50;
-          nextDisasterQuestion();
-          updateNav();
-        };
-        area.appendChild(btn);
+      // Update user stats
+      userScore += quizScore;
+      const newQuizzesCompleted = (currentUser.stats.quizzesCompleted || 0) + 1;
+      const newAccuracy = Math.round(
+        ((currentUser.stats.accuracyRate * currentUser.stats.quizzesCompleted) + percentage) / newQuizzesCompleted
+      );
+
+      updateUserStats({
+        totalScore: userScore,
+        quizzesCompleted: newQuizzesCompleted,
+        accuracyRate: newAccuracy
       });
 
-      startTimer();
+      // Add activity
+      addActivity({
+        type: 'quiz_completed',
+        title: `Completed "${currentQuiz.category.title}" Quiz`,
+        description: `Scored ${percentage}% and earned ${quizScore} points`,
+        icon: '✅'
+      });
+
+      // Check for badges
+      checkAndAwardBadges(newQuizzesCompleted, percentage);
+
+      questionBox.innerHTML = `
+        <div class="score-display">
+          <div class="score-message">Quiz Completed!</div>
+          <div class="final-score">${percentage}%</div>
+          
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-value">${correctAnswers}/${totalQuestions}</div>
+              <div class="stat-label">Correct Answers</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-value">+${quizScore}</div>
+              <div class="stat-label">Points Earned</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-value">${userScore.toLocaleString()}</div>
+              <div class="stat-label">Total Score</div>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button class="btn" onclick="retakeQuiz()">Retake Quiz</button>
+            <button class="btn btn-secondary" onclick="closeQuiz()">Back to Hub</button>
+          </div>
+        </div>
+      `;
+
+      updateNav();
+      calculateUserRank();
     }
 
-    function nextDisasterQuestion() {
-      disasterIndex++;
-      if (disasterIndex >= disasterQuiz.length) {
-        document.getElementById("questionText").innerText = "Disaster Mode Completed!";
-        document.getElementById("optionsArea").innerHTML = "";
-        document.getElementById("timerBox").innerText = "";
-        userBadges += 1;
-        updateNav();
-      } else {
-        loadDisasterQuestion();
+    // Check and award badges
+    function checkAndAwardBadges(quizzesCompleted, percentage) {
+      // First quiz badge
+      if (quizzesCompleted === 1) {
+        awardBadge('First Steps', '🌟');
+      }
+
+      // Perfect score badge
+      if (percentage === 100) {
+        awardBadge('Perfect Score', '💯');
+      }
+
+      // Quiz milestones
+      if (quizzesCompleted === 5) {
+        awardBadge('Quiz Enthusiast', '📚');
+      }
+      if (quizzesCompleted === 10) {
+        awardBadge('Quiz Master', '🏆');
+      }
+      if (quizzesCompleted === 25) {
+        awardBadge('Quiz Legend', '👑');
       }
     }
 
-    function openMode(mode) {
-      if (!modes[mode]) {
-        console.error("Mode not found:", mode);
-        alert("This mode is not available yet.");
-        return;
-      }
-
-      document.getElementById("selectionPage").classList.add("hidden");
-      document.getElementById("modePage").classList.remove("hidden");
-
-      document.getElementById("modeTitle").innerText = modes[mode].title;
-      document.getElementById("modeDesc").innerText = modes[mode].desc;
-
-      disasterIndex = 0;
-
-      if (mode === "disaster") loadDisasterQuestion();
-      else {
-        document.getElementById("timerBox").innerText = "";
-        document.getElementById("questionText").innerText = "Mode content coming soon.";
-        document.getElementById("optionsArea").innerHTML = "";
+    // Award a badge
+    function awardBadge(name, icon) {
+      const existingBadge = currentUser.badges?.find(b => b.name === name);
+      if (!existingBadge) {
+        addBadge({ name, icon });
+        userBadges++;
+        
+        // Show badge notification
+        alert(`🎉 New Badge Earned: ${icon} ${name}!`);
       }
     }
 
-    function backHome() {
-      clearInterval(timerInterval);
-      document.getElementById("modePage").classList.add("hidden");
-      document.getElementById("selectionPage").classList.remove("hidden");
+    // Retake current quiz
+    function retakeQuiz() {
+      currentQuestionIndex = 0;
+      quizScore = 0;
+      correctAnswers = 0;
+      loadQuestion();
     }
 
-    console.assert(modes.disaster.title !== undefined, "Disaster mode missing");
-    console.assert(modes.water.title !== undefined, "Water mode missing");
-    console.assert(modes.pest.title !== undefined, "Pest mode missing");
+    // Close quiz modal
+    function closeQuiz() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
+      document.getElementById('quizModal').classList.remove('active');
+      currentQuiz = null;
+    }
 
-    updateNav();
-
+    // Initialize page on load
+    initializePage();
   </script>
 
 </body>
