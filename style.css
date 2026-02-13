@@ -20,7 +20,7 @@ body{
     width:100%;
 }
 .nav-links a:hover{
-    color:#52b788;
+    color:#ffffff;
 }
 .logo{
     font-weight:bold;
@@ -36,7 +36,7 @@ body{
 
 .nav-links a{
     text-decoration:none;
-    color:#3e5c4b;
+    color:#000000;
     font-weight:500;
 }
 
