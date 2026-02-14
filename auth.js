@@ -2,7 +2,7 @@
 // Handles user registration, login, and session management using localStorage
 
 // Simple encryption/decryption using Base64 and Caesar cipher
-const ENCRYPTION_KEY = 'GreenFarm2026SecretKey';
+const ENCRYPTION_KEY = 'CodeCraftersSecretKey';
 
 // Encrypt password
 function encryptPassword(password) {
