@@ -825,6 +825,11 @@
             posts.unshift(newPost);
             savePosts(posts);
 
+            // Update user's postsShared stat
+            updateUserStats({
+                postsShared: (currentUser.stats.postsShared || 0) + 1
+            });
+
             // Add activity
             addActivity({
                 type: 'community_post',
@@ -834,6 +839,9 @@
 
             document.getElementById('postContent').value = '';
             renderPosts();
+            
+            // Show success message
+            alert('✅ Post shared successfully!');
         }
 
         function extractHashtags(text) {
@@ -932,7 +940,7 @@
                                 <span class="action-icon">💬</span>
                                 <span>${comments.length} ${comments.length === 1 ? 'Comment' : 'Comments'}</span>
                             </button>
-                            <button class="post-action">
+                            <button class="post-action" onclick="sharePost('${post.id}', '${post.author}')">
                                 <span class="action-icon">🔗</span>
                                 <span>Share</span>
                             </button>
@@ -1128,6 +1136,47 @@
             if (diffHours < 24) return `${diffHours}h ago`;
             if (diffDays < 7) return `${diffDays}d ago`;
             return then.toLocaleDateString();
+        }
+
+        // Share post function
+        function sharePost(postId, authorName) {
+            const posts = getPosts();
+            const post = posts.find(p => p.id === postId);
+            
+            if (!post) return;
+
+            // Create shareable link (in production, this would be a real URL)
+            const shareUrl = `${window.location.origin}/community.html?post=${postId}`;
+            
+            // Try to use Web Share API if available (mobile)
+            if (navigator.share) {
+                navigator.share({
+                    title: `Post by ${authorName} - GreenFarm Community`,
+                    text: post.content.substring(0, 100) + '...',
+                    url: shareUrl
+                }).then(() => {
+                    alert('✅ Post shared successfully!');
+                    updateUserStats({
+                        postsShared: (currentUser.stats.postsShared || 0) + 1
+                    });
+                }).catch(err => {
+                    // User cancelled share
+                    console.log('Share cancelled');
+                });
+            } else {
+                // Fallback: Copy to clipboard
+                const shareText = `Check out this post by ${authorName} on GreenFarm:\n\n"${post.content}"\n\n${shareUrl}`;
+                
+                navigator.clipboard.writeText(shareText).then(() => {
+                    alert('✅ Post link copied to clipboard!\n\nYou can now paste and share it anywhere.');
+                    updateUserStats({
+                        postsShared: (currentUser.stats.postsShared || 0) + 1
+                    });
+                }).catch(err => {
+                    // Manual copy fallback
+                    prompt('Copy this link to share:', shareUrl);
+                });
+            }
         }
 
         // Sidebar filtering
